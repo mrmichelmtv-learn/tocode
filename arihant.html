@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arihant | Portfolio — Upgraded</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- AOS (Animate on Scroll) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <!-- SweetAlert included by user already; we keep using it -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- tsParticles for hero background particles -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+
+  <!-- EmailJS (for contact form) -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+
+  <style>
+    /* ---------- RESET ---------- */
+    * { box-sizing: border-box; margin:0; padding:0; font-family: 'Poppins', sans-serif; }
+    :root{
+      --bg: #0f1724; /* dark default */
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.06);
+      --muted: #9aa4b2;
+      --accent: #00e5d4; /* accent — can change with selector */
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-blur: 10px;
+    }
+
+    /* Light theme overrides (applied when body .light) */
+    body.light{ --bg:#f7f9fc; --card: rgba(255,255,255,0.7); --glass: rgba(255,255,255,0.6); --muted:#5a6b78; --accent:#00796b; --glass-border: rgba(0,0,0,0.06); }
+
+    html,body{height:100%; background: linear-gradient(180deg, #081026 0%, #0f1724 60%); color: #e8eef6; }
+    body.light html, body.light{ background: linear-gradient(180deg,#ffffff 0%, #f3f6fb 60%); color:#122; }
+    .container{ max-width:1200px; margin:0 auto; padding-left:12px; padding-right:12px; }
+
+    /* ---------- NAVBAR ---------- */
+    header{ position:fixed; top:16px; left:0; right:0; margin:0 auto; width:calc(100% - 32px); z-index:2000; }
+    .nav-inner{ backdrop-filter: blur(var(--glass-blur)); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; border:1px solid var(--glass-border); padding:10px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow: 0 6px 20px rgba(2,6,23,0.5); }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .brand .logo{ width:44px; height:44px; display:grid; place-items:center; border-radius:10px; background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); box-shadow: 0 6px 18px rgba(0,0,0,0.4); }
+    .brand h1{ font-size:1.1rem; color:var(--accent); letter-spacing:0.6px; }
+    nav a{ color:var(--muted); text-decoration:none; margin:0 12px; font-weight:600; }
+    nav a:hover{ color:var(--accent); text-shadow:0 6px 18px rgba(0,230,212,0.06); }
+
+    .nav-controls{ display:flex; align-items:center; gap:10px; }
+    .icon-btn{ background:transparent; border:1px solid var(--glass-border); padding:8px 10px; border-radius:10px; cursor:pointer; backdrop-filter: blur(6px); }
+    .icon-btn:hover{ transform:translateY(-3px); }
+
+    /* responsive nav collapse */
+    .menu-toggle{ display:none; }
+    @media(max-width:820px){ .menu-toggle{ display:block; } nav{ display:none; } .nav-inner{ padding:10px; } }
+
+    /* ---------- HERO ---------- */
+    .hero{ min-height:88vh; display:flex; align-items:center; justify-content:center; padding:120px 20px 80px; position:relative; overflow:hidden; }
+    .hero .bg-glow{ position:absolute; inset:0; background: radial-gradient(600px 400px at 10% 10%, rgba(0,229,212,0.06), transparent), radial-gradient(500px 350px at 90% 90%, rgba(0,140,255,0.04), transparent); pointer-events:none; }
+    #tsparticles{ position:absolute; inset:0; z-index:0; }
+
+    .hero-card{ position:relative; z-index:5; max-width:980px; width:100%; display:grid; grid-template-columns:1fr 360px; gap:28px; align-items:center; }
+    @media(max-width:980px){ .hero-card{ grid-template-columns:1fr; text-align:center; } }
+
+    .hero-left{ padding:28px; border-radius:18px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border:1px solid var(--glass-border); backdrop-filter: blur(var(--glass-blur)); }
+    .hero-left h2{ font-size:2.4rem; margin-bottom:8px; color:var(--accent); }
+    .hero-left h1{ font-size:2.8rem; margin-bottom:12px; }
+    .typing{ display:inline-block; color:var(--accent); font-weight:700; }
+    .hero-left p{ color:var(--muted); margin-bottom:18px; }
+    .hero-cta{ display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-start; }
+    .btn{ padding:12px 20px; border-radius:999px; border:none; font-weight:700; cursor:pointer; box-shadow: 0 8px 30px rgba(0,0,0,0.35); transition:all .28s ease; }
+    .btn.glow{ background:linear-gradient(90deg,var(--accent), #6af2d9); color:#002; }
+    .btn.glow:hover{ transform:translateY(-6px); filter:drop-shadow(0 10px 30px rgba(0,229,212,0.18)); }
+    .btn.ghost{ background:transparent; border:1px solid var(--glass-border); color:var(--muted); }
+
+    .hero-right{ padding:20px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); border:1px solid var(--glass-border); backdrop-filter: blur(var(--glass-blur)); min-height:200px; display:flex; flex-direction:column; gap:12px; }
+    .badge-row{ display:flex; gap:8px; flex-wrap:wrap; }
+    .badge{ padding:8px 10px; border-radius:10px; font-weight:700; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid var(--glass-border); color:var(--muted); }
+
+    /* ---------- SECTIONS ---------- */
+    section{ padding:90px 20px; }
+    section .container{ padding:0; }
+    h2.section-title{ text-align:center; color:var(--accent); font-size:1.9rem; margin-bottom:22px; }
+    p.lead{ text-align:center; color:var(--muted); margin-bottom:28px; }
+
+    /* ---------- ABOUT ---------- */
+    #about .about-card{ display:grid; grid-template-columns:1fr 360px; gap:24px; align-items:center; max-width:1100px; margin:0 auto; }
+    #about .about-card img{
+  width:100%;
+  height:420px;   /* increase this */
+  border-radius:12px;
+  object-fit:cover;
+  border:1px solid var(--glass-border);
+}
+
+    #about .about-body{ padding:22px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid var(--glass-border); }
+    .skills{ display:flex; gap:14px; flex-wrap:wrap; }
+    .skill{ width:100%; }
+    .skill .label{ display:flex; justify-content:space-between; margin-bottom:6px; color:var(--muted); }
+    .progress{ height:10px; border-radius:999px; background:rgba(255,255,255,0.03); overflow:hidden; }
+    .progress > span{ display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--accent), rgba(255,255,255,0.1)); transition: width 1.2s ease; }
+
+    /* ---------- PROJECTS ---------- */
+    .project-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:18px; max-width:1100px; margin:0 auto; }
+    .project-card{ border-radius:12px; overflow:hidden; position:relative; border:1px solid var(--glass-border); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); transition:transform .35s ease, box-shadow .35s ease; }
+    .project-card:hover{ transform:translateY(-8px); box-shadow:0 20px 40px rgba(2,6,23,0.6); }
+    .project-card img{ width:100%; height:160px; object-fit:cover; }
+    .project-body{ padding:14px; }
+    .tag-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .tag{ font-size:.8rem; padding:6px 8px; border-radius:8px; border:1px solid var(--glass-border); color:var(--muted); }
+    .project-actions{ display:flex; gap:8px; margin-top:8px; }
+    .pill{ padding:8px 12px; border-radius:999px; background:transparent; border:1px solid var(--glass-border); cursor:pointer; }
+
+    /* Modal */
+    .modal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,6,23,0.6); z-index:4000; padding:22px; }
+    .modal .modal-card{ width:100%; max-width:920px; border-radius:12px; background: linear-gradient(180deg,#071224, #0d1622); padding:18px; border:1px solid rgba(255,255,255,0.04); }
+    .modal .close{ float:right; cursor:pointer; }
+
+    /* ---------- CERTIFICATIONS ---------- */
+    #certifications .cert-grid{ max-width:900px; margin:0 auto; display:grid; gap:12px; }
+    .cert-item{ display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; border:1px solid var(--glass-border); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)); }
+    .cert-item a{ color:var(--muted); text-decoration:none; font-weight:700; }
+    .cert-item a:hover{ color:var(--accent); }
+
+    /* ---------- CONTACT ---------- */
+    #contact form{ max-width:640px; margin:0 auto; display:grid; gap:12px; }
+    input, textarea{ padding:12px; border-radius:8px; border:1px solid var(--glass-border); background:transparent; color:inherit; }
+
+    /* footer */
+    footer{ text-align:center; padding:28px 10px; color:var(--muted); }
+
+    /* scroll to top */
+    .scroll-top{ position:fixed; right:20px; bottom:20px; z-index:1500; padding:12px 14px; border-radius:12px; border:1px solid var(--glass-border); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); cursor:pointer; }
+
+    /* small screens tweaks */
+    @media(max-width:980px){ .hero-card{ grid-template-columns:1fr; } #about .about-card{
+  display:grid;
+  grid-template-columns:1fr 480px; /* bigger image column */ grid-template-columns:1fr; } }
+
+    /* small accessibility / focus */
+    a:focus, button:focus, input:focus, textarea:focus{ outline:2px solid rgba(0,229,212,0.12); }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / NAV -->
+  <header>
+    <div class="nav-inner container">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-rocket" style="color:var(--accent)"></i></div>
+        <h1>Arihant</h1>
+      </div>
+
+      <nav aria-label="Primary" id="primaryNav">
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#professional">Professional</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-controls">
+        <button class="icon-btn" id="accentSelectorBtn" title="Change accent"> <i class="fa-solid fa-palette"></i></button>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+        <button class="icon-btn menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div id="tsparticles"></div>
+    <div class="bg-glow"></div>
+
+    <div class="hero-card container" data-aos="fade-up">
+      <div class="hero-left">
+        <h2>Hello — I build beautiful web experiences</h2>
+        <h1>Hi, I'm <strong>Arihant</strong></h1>
+        <div style="height:8px"></div>
+        <div class="typing" id="typing">Web Developer | UI Designer | Freelancer</div>
+        <p class="lead">I design and build digital products — websites, portfolios, landing pages, and frontend apps. I also take client work on Truelancer.</p>
+
+        <div class="hero-cta">
+          <button class="btn glow" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View My Work</button>
+          <a href="#contact" class="btn ghost">Contact</a>
+          <a href="https://www.truelancer.com/" target="_blank" class="btn" style="background:transparent;border:1px solid var(--glass-border)">Truelancer Profile</a>
+        </div>
+      </div>
+
+      <aside class="hero-right">
+        <div class="badge-row">
+          <div class="badge">Available for Freelance</div>
+          <div class="badge">Project Based Work</div>
+          <div class="badge">Project Portfolio</div>
+        </div>
+
+        <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+          <img src="profileimg.png" alt="avatar" style="width:160px;height:160px;border-radius:12px;object-fit:cover;border:1px solid var(--glass-border)">
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:center;">
+          <a class="btn ghost" href="#contact">Message</a>
+          <a class="btn ghost" href="#professional">Professional Projects</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <p class="lead">I'm a passionate web developer focused on creating visually appealing and user-friendly websites. I specialize in frontend development using HTML, CSS, and JavaScript, with experience in PHP and MySQL for backend integration.</p>
+
+      <div class="about-card" data-aos="fade-up">
+        <div class="about-body">
+          <p>I build responsive, fast and modern websites. I love clean code, beautiful UI, and shipping features that users enjoy. I also take on freelance client work — short-term tasks and long-term projects through Truelancer.</p>
+
+          <h3 style="margin-top:12px; color:var(--accent)">Skills</h3>
+          <div class="skills">
+            <div class="skill" data-percent="95">
+              <div class="label"><span>HTML</span><span>95%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="93">
+              <div class="label"><span>CSS</span><span>93%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="91">
+              <div class="label"><span>JavaScript</span><span>91%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="87">
+              <div class="label"><span>SQL</span><span>87%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="83">
+              <div class="label"><span>PHP</span><span>83%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="75">
+              <div class="label"><span>React</span><span>75%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <!-- New skills requested -->
+            <div class="skill" data-percent="81">
+              <div class="label"><span>Python</span><span>81%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="77">
+              <div class="label"><span>Java</span><span>77%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="79">
+              <div class="label"><span>C</span><span>79%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="80">
+              <div class="label"><span>C++</span><span>80%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="47">
+              <div class="label"><span>C#</span><span>47%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+            <div class="skill" data-percent="32">
+              <div class="label"><span>Go (Basic)</span><span>32%</span></div>
+              <div class="progress"><span style="width:0%"></span></div>
+            </div>
+
+          </div>
+        </div>
+
+        <img src="image2.png" alt="work">
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS (original) -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title">My Projects</h2>
+      <p class="lead">Frontend Projects</p>
+
+      <div class="project-grid" data-aos="fade-up">
+
+        <!-- keep original projects but upgraded cards -->
+        <div class="project-card" data-project='{"title":"Portfolio Website","img":"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80","summary":"A responsive and stylish personal portfolio showcasing my web projects and skills.","tags":["HTML","CSS","JS"]}'>
+          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80" alt="Portfolio">
+          <div class="project-body">
+            <h3>Portfolio Website</h3>
+            <p>A responsive and stylish personal portfolio showcasing my web projects and skills.</p>
+            <div class="tag-row">
+              <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
+            </div>
+            <div class="project-actions">
+              <button class="pill" onclick="openProjectModal(this)">Details</button>
+              <a class="pill" href="#" onclick="event.preventDefault();" title="This webpage">This Webpage</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card" data-project='{"title":"Technova Solutions","img":"https://t4.ftcdn.net/jpg/03/08/69/75/360_F_308697506_9dsBYHXm9FwuW0qcEqimAEXUvzTwfzwe.jpg","summary":"A professional business website offering coding, hosting, and IT services.","tags":["HTML","CSS","JS"]}'>
+          <img src="https://t4.ftcdn.net/jpg/03/08/69/75/360_F_308697506_9dsBYHXm9FwuW0qcEqimAEXUvzTwfzwe.jpg" alt="Technova">
+          <div class="project-body">
+            <h3>Technova Solutions</h3>
+            <p>A professional business website offering coding, hosting, and IT services.</p>
+            <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span></div>
+            <div class="project-actions">
+              <button class="pill" onclick="openProjectModal(this)">Details</button>
+              <a class="pill" href="https://arihantsinhagit.github.io/technovasolutions/" target="_blank">Live Demo</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card" data-project='{"title":"Scientific Calculator","img":"https://image.made-in-china.com/2f0j00GEFRucelahkW/Stylish-Calculator-for-Gift-Solar-Calculator-Desk-Calculator.jpg","summary":"A functional scientific calculator built using HTML, CSS, and JavaScript.","tags":["JS","HTML"]}'>
+          <img src="https://image.made-in-china.com/2f0j00GEFRucelahkW/Stylish-Calculator-for-Gift-Solar-Calculator-Desk-Calculator.jpg" alt="Calc">
+          <div class="project-body">
+            <h3>Scientific Calculator</h3>
+            <p>A functional scientific calculator built using HTML, CSS, and JavaScript.</p>
+            <div class="tag-row"><span class="tag">JS</span></div>
+            <div class="project-actions">
+              <button class="pill" onclick="openProjectModal(this)">Details</button>
+              <a class="pill" href="https://arihantsinhagit.github.io/calculator/" target="_blank">Live Demo</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card" data-project='{"title":"Restaurant Website","img":"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=60","summary":"An interactive restaurant site showcasing menu, offers, and feedback forms.","tags":["HTML","CSS","JS"]}'>
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=60" alt="Restaurant">
+          <div class="project-body">
+            <h3>Restaurant Website</h3>
+            <p>An interactive restaurant site showcasing menu, offers, and feedback forms.</p>
+            <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span></div>
+            <div class="project-actions">
+              <button class="pill" onclick="openProjectModal(this)">Details</button>
+              <a class="pill" href="https://arihantsinhagit.github.io/resturantpage/" target="_blank">Live Demo</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center; margin-top:22px;">
+        <p class="lead">Note: I primarily focus on frontend projects. I also build full-stack apps as large client projects.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFESSIONAL PROJECTS (New Section) -->
+  <section id="professional">
+    <div class="container">
+      <h2 class="section-title">Professional Projects</h2>
+      <p class="lead">Client & Truelancer work </p>
+
+      <div class="project-grid" data-aos="fade-up">
+        <!-- Example professional project card with modal details -->
+        <div class="project-card" data-project='{"title":"E-Commerce Landing","img":"https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&w=800&q=60","summary":"Landing page & frontend integration for a retail client. Implemented responsive layout, product carousel and checkout UI.","tags":["HTML","CSS","JS","API"],"client":"Truelancer Client","type":"Paid Project","details":"Worked as the primary frontend developer. Integrated REST API for products, responsive design, and basic analytics."}'>
+          <img src="https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&w=800&q=60" alt="Ecom">
+          <div class="project-body">
+            <h3>E-Commerce Landing</h3>
+            <p>Landing page & frontend integration for a retail client.</p>
+            <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">API</span></div>
+            <div class="project-actions"><button class="pill" onclick="openProjectModal(this)">Details</button><a class="pill" href="#">Live Demo</a></div>
+          </div>
+        </div>
+
+        <div class="project-card" data-project='{"title":"SaaS Dashboard","img":"https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=60","summary":"Admin dashboard UI for a SaaS product — charts, tables and responsive controls.","tags":["React","Charts","API"],"client":"Startup Client","type":"Contract","details":"Built React components, charts and implemented authentication flows for dashboard users."}'>
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=60" alt="SaaS">
+          <div class="project-body">
+            <h3>SaaS Dashboard</h3>
+            <p>Admin dashboard UI for a SaaS product.</p>
+            <div class="tag-row"><span class="tag">React</span><span class="tag">API</span></div>
+            <div class="project-actions"><button class="pill" onclick="openProjectModal(this)">Details</button><a class="pill" href="#">Client Link</a></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS (NEW) -->
+  <section id="certifications">
+    <div class="container">
+      <h2 class="section-title">Certifications</h2>
+      <p class="lead">Selected certificates — HP LIFE & HackerRank</p>
+
+      <div class="cert-grid" data-aos="fade-up">
+        <!-- HP LIFE -->
+        <div class="cert-item">
+          <i class="fa-solid fa-certificate" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HP LIFE Certificate</strong></div>
+            <div><a href="https://www.life-global.org/certificate/88eef7a8-41ce-4fea-a464-3212b5317ce2" target="_blank" rel="noopener">View Certificate — AI for Business Professionals</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-solid fa-certificate" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HP LIFE Certificate</strong></div>
+            <div><a href="https://www.life-global.org/certificate/b3262764-69cc-4d22-ad62-29e0e071b7b4" target="_blank" rel="noopener">View Certificate — AI for Beginners</a></div>
+          </div>
+        </div>
+
+                <div class="cert-item">
+          <i class="fa-solid fa-certificate" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HP LIFE Certificate</strong></div>
+            <div><a href="https://www.life-global.org/certificate/76e574d0-6921-43ae-844d-80b35fab2091" target="_blank" rel="noopener">View Certificate — Critical Thinking in the AI Era</a></div>
+          </div>
+        </div>
+
+        <!-- HackerRank certificates -->
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — SQL Basic</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/098a90319d71" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — Python Basic</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/e281459a218e" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — Java Basic</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/e145685ad71d" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — CSS Basic</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/aa1119749e42" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — SQL Intermediate</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/1a2723aa17bd" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — C# Basic</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/aebfaf9df082" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <i class="fa-brands fa-hackerrank" style="font-size:20px;color:var(--accent)"></i>
+          <div>
+            <div><strong>HackerRank — Go Basic</strong></div>
+            <div><a href="https://www.hackerrank.com/certificates/3a2a97a6ffc6" target="_blank" rel="noopener">View Certificate</a></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MINI DASHBOARD (Optional Bonus) -->
+  <section id="dashboard">
+    <div class="container">
+      <h2 class="section-title">Mini Dashboard</h2>
+      <p class="lead">Mock overview for clients to see activity.</p>
+      <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:center;">
+        <div class="package" style="min-width:160px; text-align:center;">
+          <h3 id="ongoing">3</h3>
+          <div>Ongoing Projects</div>
+        </div>
+        <div class="package" style="min-width:160px; text-align:center;">
+          <h3 id="completed">28</h3>
+          <div>Completed Projects</div>
+        </div>
+        <div class="package" style="min-width:160px; text-align:center;">
+          <h3 id="earnings">₹4,731</h3>
+          <div>Earnings</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact Me</h2>
+      <p class="lead">Send a message or reach me directly via email / Truelancer</p>
+
+      <form id="contactForm" data-aos="fade-up">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <input type="text" id="subject" placeholder="Subject" required>
+        <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <button type="submit" class="btn glow">Send Message</button>
+          <a href="mailto:mrmichelmtv@gmail.com" class="btn ghost">Email</a>
+          <a href="https://www.truelancer.com/" target="_blank" class="btn ghost">Truelancer</a>
+        </div>
+      </form>
+
+      <div style="text-align:center; margin-top:18px; color:var(--muted)">
+        <a href="#" aria-label="Github" style="margin-right:12px"><i class="fa-brands fa-github"></i></a>
+        <a href="#" aria-label="LinkedIn" style="margin-right:12px"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="#" aria-label="Truelancer"><i class="fa-solid fa-briefcase"></i></a>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Arihant. All rights reserved. — Built for Truelancer clients
+  </footer>
+
+  <button class="scroll-top" id="scrollTopBtn" title="Scroll to top"><i class="fa-solid fa-chevron-up"></i></button>
+
+  <!-- Project Modal (hidden by default) -->
+  <div id="projectModal" style="display:none" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card container">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <h3 id="modalTitle">Project Title</h3>
+        <div class="close" onclick="closeModal()" title="Close"><i class="fa-solid fa-xmark"></i></div>
+      </div>
+      <div id="modalBody" style="margin-top:12px; display:flex; gap:14px; flex-wrap:wrap;">
+        <!-- JS will populate -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    /* ----------------- Utils & Initialization ----------------- */
+    // AOS initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ duration:800, once:true });
+    });
+
+    // tsParticles init (hero) — subtle dots & lines
+    tsParticles.load("tsparticles", {
+      fpsLimit: 60,
+      background: { color: "transparent" },
+      particles: {
+        number: { value: 40 },
+        color: { value: "#00e5d4" },
+        links: { enable: true, color: "#5ef0d9", distance: 140, opacity: 0.12, width: 1 },
+        move: { enable: true, speed: 0.8, outModes: { default: "out" } },
+        size: { value: { min: 1, max: 3 } },
+        opacity: { value: 0.7 }
+      },
+      interactivity: { events: { onHover: { enable: true, mode: "grab" }, onClick: { enable: true, mode: "push" } }, modes: { grab: { distance: 140 } } }
+    });
+
+    // Typing animation (simple)
+    const typingEl = document.getElementById('typing');
+    const typingTexts = ['Web Developer','UI Designer','Freelancer','Frontend Engineer'];
+    let typeIndex=0, charIndex=0, forward=true;
+    function runTyping(){
+      const txt = typingTexts[typeIndex];
+      if(forward){
+        charIndex++;
+        typingEl.textContent = txt.slice(0,charIndex);
+        if(charIndex===txt.length){ forward=false; setTimeout(runTyping,900); return; }
+      } else {
+        charIndex--;
+        typingEl.textContent = txt.slice(0,charIndex);
+        if(charIndex===0){ forward=true; typeIndex=(typeIndex+1)%typingTexts.length; }
+      }
+      setTimeout(runTyping, 120);
+    }
+    runTyping();
+
+    // Theme toggle + accent color
+    const themeToggle = document.getElementById('themeToggle');
+    const accentSelectorBtn = document.getElementById('accentSelectorBtn');
+    function applyTheme(theme){
+      if(theme==='light') document.body.classList.add('light'); else document.body.classList.remove('light');
+      localStorage.setItem('site-theme', theme);
+      themeToggle.innerHTML = theme==='light'? '<i class="fa-solid fa-sun" style="color:var(--accent)"></i>':'<i class="fa-solid fa-moon"></i>';
+    }
+    themeToggle.addEventListener('click', ()=>{
+      const current = localStorage.getItem('site-theme') || 'dark';
+      applyTheme(current==='dark' ? 'light' : 'dark');
+    });
+    // Accent color picker (simple cycle)
+    const accents = ['#00e5d4','#6a8dff','#ff7aa2','#00c2ff','#8cf27a'];
+    accentSelectorBtn.addEventListener('click', ()=>{
+      const current = localStorage.getItem('site-accent') || accents[0];
+      let idx = accents.indexOf(current); idx = (idx+1)%accents.length; localStorage.setItem('site-accent', accents[idx]); document.documentElement.style.setProperty('--accent', accents[idx]);
+    });
+
+    // Apply saved theme/accent
+    (function(){ const saved = localStorage.getItem('site-theme')||'dark'; applyTheme(saved); const accent = localStorage.getItem('site-accent')||'#00e5d4'; document.documentElement.style.setProperty('--accent', accent); })();
+
+    // Menu toggle for mobile
+    const menuToggle = document.getElementById('menuToggle'); menuToggle.addEventListener('click', ()=>{
+      const nav = document.getElementById('primaryNav'); if(nav.style.display==='flex'){ nav.style.display='none'; } else { nav.style.display='flex'; nav.style.flexDirection='column'; nav.style.gap='10px'; }
+    });
+
+    // Scroll to top
+    const scrollTopBtn = document.getElementById('scrollTopBtn'); window.addEventListener('scroll', ()=>{ if(window.scrollY>300) scrollTopBtn.style.display='block'; else scrollTopBtn.style.display='none'; }); scrollTopBtn.addEventListener('click', ()=>{ window.scrollTo({top:0,behavior:'smooth'}); });
+
+    // Animate skills when in view
+    const skills = document.querySelectorAll('.skill');
+    const skillObserver = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const el = entry.target;
+          const percent = el.getAttribute('data-percent');
+          const bar = el.querySelector('.progress > span');
+          // safety: clamp percent
+          let p = parseInt(percent,10);
+          if(isNaN(p)) p = 0;
+          if(p<0) p = 0;
+          if(p>100) p = 100;
+          bar.style.width = p+'%';
+          skillObserver.unobserve(el);
+        }
+      });
+    }, {threshold:0.45});
+    skills.forEach(s=>skillObserver.observe(s));
+
+    // Project modal
+    function openProjectModal(btn){
+      const card = btn.closest('.project-card'); const data = JSON.parse(card.getAttribute('data-project'));
+      document.getElementById('modalTitle').textContent = data.title || 'Project';
+      const mb = document.getElementById('modalBody'); mb.innerHTML = '';
+      const left = document.createElement('div'); left.style.flex='1'; left.innerHTML = `<img src="${data.img || ''}" style="width:100%; border-radius:8px; object-fit:cover;" />`;
+      const right = document.createElement('div'); right.style.flex='1'; right.innerHTML = `<p style="color:var(--muted)"> ${data.details || data.summary || ''}</p><p style="margin-top:8px"><strong>Client:</strong> ${data.client || 'Personal/Truelancer'}</p><p><strong>Type:</strong> ${data.type || 'Demo'}</p><div style="margin-top:12px"><a class='btn glow' href='#'>Live Demo</a> <a class='btn ghost' href='#' style='margin-left:8px'>Source Code</a></div>`;
+      mb.appendChild(left); mb.appendChild(right);
+      const modal = document.getElementById('projectModal'); modal.style.display='grid'; document.body.style.overflow='hidden';
+    }
+    function closeModal(){ const modal = document.getElementById('projectModal'); modal.style.display='none'; document.body.style.overflow='auto'; }
+
+    // Close modal on Esc or click outside
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); }); document.getElementById('projectModal').addEventListener('click', (e)=>{ if(e.target.id==='projectModal') closeModal(); });
+
+    // Contact form using EmailJS
+(function(){
+  // ----- CONFIG - use your real values -----
+  const EMAILJS_USER     = 'gFBMk1bKXF7cjrwmU';   // public key (frontend-safe)
+  const EMAILJS_SERVICE  = 'service_nhqfsr5';
+  const EMAILJS_TEMPLATE = 'template_2hia6v7';    // your Template ID (copy from EmailJS)
+  // -----------------------------------------
+
+  // init
+  if(window.emailjs && typeof emailjs.init === 'function'){
+    emailjs.init(EMAILJS_USER);
+    console.log('EmailJS initialized with public key.');
+  } else {
+    console.warn('EmailJS library missing — check the <script> include for email.min.js');
+  }
+
+  const form = document.getElementById('contactForm');
+  if(!form){ console.error('contactForm not found'); return; }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if(!name || !email || !message){
+      Swal.fire({ icon:'error', title:'Please fill all fields', confirmButtonColor: getComputedStyle(document.documentElement).getPropertyValue('--accent') });
+      return;
+    }
+
+    // Ensure template id & public key not placeholders
+    if(!EMAILJS_USER || EMAILJS_USER.includes('YOUR') || !EMAILJS_TEMPLATE || EMAILJS_TEMPLATE.includes('YOUR')){
+      Swal.fire({ icon:'info', title:'EmailJS not configured', text:'Please set the correct EmailJS public key and template id in the config.' });
+      return;
+    }
+
+    // IMPORTANT: keys MUST match the variables in your EmailJS template
+    const payload = {
+      title: subject,   // matches {{title}}
+      name: name,       // matches {{name}}
+      email: email,     // matches {{email}} (reply-to)
+      message: message  // optional: if you reference it in template
+    };
+
+    console.log('EmailJS payload →', payload);
+
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, payload)
+      .then(function(response){
+        console.log('EmailJS success', response);
+        Swal.fire({ icon:'success', title:'Message sent', text:'Your message has been sent successfully!', confirmButtonColor: getComputedStyle(document.documentElement).getPropertyValue('--accent') });
+        form.reset();
+      })
+      .catch(function(err){
+        console.error('EmailJS error (full):', err);
+        // try to extract server message
+        const serverMsg = (err && (err.text || (err.response && err.response.text))) ? (err.text || err.response.text) : null;
+        Swal.fire({ icon:'error', title:'Sending failed', text: serverMsg || 'There was a problem sending your message — check console for details.' });
+      });
+  });
+})();
+
+
+
+    // Small accessibility: keyboard nav for project cards
+    document.querySelectorAll('.project-card').forEach(pc=>{ pc.setAttribute('tabindex','0'); pc.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ const btn = pc.querySelector('.pill'); if(btn) btn.click(); } }); });
+
+    /* ----------------- Tiny analytics / mock updates (dashboard) ----------------- */
+    (function(){ document.getElementById('ongoing').textContent = 3; document.getElementById('completed').textContent = 28; document.getElementById('earnings').textContent = '₹2,500'; })();
+
+    // AOS library script load
+  </script>
+
+  <!-- AOS script (loaded last) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+  <!-- Final note: keep the code commented for where to change EmailJS values -->
+
+</body>
+</html>
+
